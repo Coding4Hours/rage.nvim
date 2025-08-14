@@ -71,7 +71,7 @@ function M.setup()
     if not M.running then
       M.timer:start(300000, 300000, vim.schedule_wrap(M.insult_me))
       M.running = true
-      print("🔥 Rage started")
+      print("Rage started")
     end
   end
 
@@ -81,7 +81,7 @@ function M.setup()
       M.timer:close()
       M.timer = vim.loop.new_timer()
       M.running = false
-      print("😌 Rage stopped")
+      print("Rage stopped")
     end
   end
 
