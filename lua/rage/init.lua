@@ -65,23 +65,33 @@ end
 
 function M.setup()
   M.timer = vim.loop.new_timer()
-  vim.api.nvim_create_user_command(
-    "Rage",
-    function()
+  M.running = false
+
+  local function start()
+    if not M.running then
       M.timer:start(300000, 300000, vim.schedule_wrap(M.insult_me))
-    end,
-    {}
-  )
-  vim.api.nvim_create_user_command(
-    "Calm",
-    function()
-      if M.timer then
-        M.timer:stop()
-        M.timer:close()
-      end
-    end,
-    {}
-  )
+      M.running = true
+      print("🔥 Rage started")
+    end
+  end
+
+  local function stop()
+    if M.running then
+      M.timer:stop()
+      M.timer:close()
+      M.timer = vim.loop.new_timer()
+      M.running = false
+      print("😌 Rage stopped")
+    end
+  end
+
+  vim.api.nvim_create_user_command("Rage", start, {})
+  vim.api.nvim_create_user_command("Calm", stop, {})
+  vim.api.nvim_create_user_command("RageToggle", function()
+    if M.running then stop() else start() end
+  end, {})
 end
+
+
 
 return M
